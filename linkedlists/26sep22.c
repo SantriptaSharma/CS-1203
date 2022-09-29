@@ -59,6 +59,24 @@ void PrintHalfList(Node *head)
     printf("]\n");
 }
 
+int IsListLooping(Node *head)
+{
+    Node *t, *h;
+    t = h = head;
+
+    while (h)
+    {
+        h = h->next;
+        if (t == h) return 1;
+        if (!h) break;
+        h = h->next;
+        if (t == h) return 1;
+        t = t->next;
+    }
+
+    return 0;
+}
+
 void FreeList(Node *head)
 {
     if (head == NULL) return;
@@ -86,5 +104,13 @@ int main(int argc, char **argv)
     Insert(&head, 32);
     PrintList(head);
     PrintHalfList(head);
+
+    Node *temp = head->next->next->next;
+    printf("%d\n", IsListLooping(head));
+    head->next->next->next = head->next;
+    printf("%d\n", IsListLooping(head));
+    head->next->next->next = temp;
+    printf("%d\n", IsListLooping(head));
+
     FreeList(head);
 }
