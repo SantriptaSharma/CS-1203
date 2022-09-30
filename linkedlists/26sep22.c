@@ -81,14 +81,34 @@ void FreeList(Node *head)
 {
     if (head == NULL) return;
 
-    if (head->next == NULL)
+    if (head->next != NULL) FreeList(head->next);
+    free(head);
+}
+
+void ReverseList(Node **head)
+{
+    Node *cur = (*head)->next, *prev = *head;
+    (*head)->next = NULL;
+
+    while (cur)
     {
-        free(head);
-        return;
+        Node *next = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = next;
     }
 
-    FreeList(head->next);
-    free(head);
+    *head = prev;
+}
+
+Node* FindNode(Node *head, int value)
+{
+    for (int i = 0; head != NULL; i++, head = head->next)
+    {
+        if (head->value == value) return head;
+    }
+
+    return NULL;
 }
 
 int main(int argc, char **argv)
@@ -111,6 +131,18 @@ int main(int argc, char **argv)
     printf("%d\n", IsListLooping(head));
     head->next->next->next = temp;
     printf("%d\n", IsListLooping(head));
+
+    ReverseList(&head);
+    PrintList(head);
+    Insert(&head, 15);
+    PrintList(head);
+    PrintHalfList(head);
+    ReverseList(&head);
+    PrintList(head);
+
+    Node* mid = FindNode(head, 32);
+    mid->value = 19;
+    PrintList(head);
 
     FreeList(head);
 }
