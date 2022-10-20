@@ -1,11 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct _NodeCanonical
-{
-    int value;
-    struct _NodeCanonical *next;
-} Node;
+#include "linkedlist.h"
 
 void Insert(Node **head, int value)
 {
@@ -109,40 +105,4 @@ Node* FindNode(Node *head, int value)
     }
 
     return NULL;
-}
-
-int main(int argc, char **argv)
-{
-    Node *head = NULL;
-    Insert(&head, 5);
-    Insert(&head, 12);
-    Insert(&head, 32);
-    PrintHalfList(head);
-    Insert(&head, 15);
-    Insert(&head, 25);
-    PrintList(head);
-    Insert(&head, 32);
-    PrintList(head);
-    PrintHalfList(head);
-
-    Node *temp = head->next->next->next;
-    printf("%d\n", IsListLooping(head));
-    head->next->next->next = head->next;
-    printf("%d\n", IsListLooping(head));
-    head->next->next->next = temp;
-    printf("%d\n", IsListLooping(head));
-
-    ReverseList(&head);
-    PrintList(head);
-    Insert(&head, 15);
-    PrintList(head);
-    PrintHalfList(head);
-    ReverseList(&head);
-    PrintList(head);
-
-    Node* mid = FindNode(head, 32);
-    mid->value = 19;
-    PrintList(head);
-
-    FreeList(head);
 }
