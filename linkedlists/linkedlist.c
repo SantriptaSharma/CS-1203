@@ -134,12 +134,53 @@ void ChunkReverseList(Node **head, int chunkSize)
     }
 }
 
-Node* FindNode(Node *head, int value)
+static Node* FindPrevOfSmallest(Node *head)
 {
-    for (int i = 0; head != NULL; i++, head = head->next)
+    int minimum = head->value;
+    Node *minimumPrev = NULL;
+
+    for (; head; head = head->next)
     {
-        if (head->value == value) return head;
+        if (head->next && head->next->value < minimum)
+        {
+            minimum = head->next->value;
+            minimumPrev = head;
+        }
     }
 
-    return NULL;
+    return minimumPrev;
+}
+
+void SelectionSort(Node **head)
+{
+    Node *sortHead = *head, *prev = NULL;
+
+    while (sortHead)
+    {
+        Node *prevOfMinimum = FindPrevOfSmallest(sortHead);
+
+        if (prevOfMinimum == NULL) 
+        {
+            prev = sortHead;
+            sortHead = sortHead->next;
+            continue;
+        }
+
+        if (prev == NULL)
+        {
+            *head = prevOfMinimum->next;
+            prevOfMinimum->next = prevOfMinimum->next->next;
+            (*head)->next = sortHead;
+
+            prev = *head;
+        }
+        else
+        {
+            prev->next = prevOfMinimum->next;
+            prevOfMinimum->next = prevOfMinimum->next->next;
+            prev->next->next = sortHead;
+
+            prev = prev->next;
+        }
+    }
 }
