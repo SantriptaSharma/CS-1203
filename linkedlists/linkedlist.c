@@ -97,6 +97,43 @@ void ReverseList(Node **head)
     *head = prev;
 }
 
+void ChunkReverseList(Node **head, int chunkSize)
+{
+    if (chunkSize <= 0) return;
+    if (chunkSize == 1) return ReverseList(head);
+
+
+    Node *cur = *head, *prev = NULL;
+    Node *chunkStart = NULL, *lastChunkEnd = NULL;
+
+    int index = 0;
+
+    while (cur)
+    {
+        Node *next = cur->next;
+
+        int indexInChunk = index % chunkSize;
+
+        if (indexInChunk == 0)
+        {
+            lastChunkEnd = chunkStart;
+            chunkStart = cur;
+            prev = NULL;
+        }
+        else if (indexInChunk == chunkSize - 1 || next == NULL)
+        {
+            if (index / chunkSize == 0) *head = cur;
+            if (lastChunkEnd) lastChunkEnd->next = cur;
+            chunkStart->next = next;
+        }
+
+        cur->next = prev;
+        prev = cur;
+        cur = next;
+        index += 1;
+    }
+}
+
 Node* FindNode(Node *head, int value)
 {
     for (int i = 0; head != NULL; i++, head = head->next)

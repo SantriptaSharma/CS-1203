@@ -1,6 +1,6 @@
 CC = gcc
 LLC = linkedlist.c
-FLAGS = -g3
+FLAGS = -g3 -Wall
 FINT_FILES = from_integers.c
 REV_FILES = reverse.c
 CHUNK_REV_FILES = chunk_reverse.c

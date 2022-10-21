@@ -8,6 +8,7 @@ void Insert(Node **head, int value);
 void PrintList(Node *head);
 void PrintHalfList(Node *head);
 int IsListLooping(Node *head);
-void FreeList(Node *head);
 void ReverseList(Node **head);
+void ChunkReverseList(Node **head, int chunkSize);
 Node* FindNode(Node *head, int value);
+void FreeList(Node *head);
