@@ -25,4 +25,4 @@ selection_sort: $(SELSORT_FILES) $(LLC)
 
 clean:
 	rm -f *.o
-	rm -f prog prog.exe
+	rm -f $(PROGO) $(PROGO).exe
