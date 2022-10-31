@@ -1,16 +1,6 @@
 #include <stdio.h>
 #include "bst.h"
-
-#define Assert(name, x) \
-    if (!(x)) \
-    { \
-        printf("\x1B[33mAssertion: %s failed.\x1B[0m\n", name); \
-        return 1; \
-    } \
-    else \
-    { \
-        printf("\x1B[32mAssertion: %s passed.\x1B[0m\n", name); \
-    }
+#include "../utils.h"
 
 int main()
 {
