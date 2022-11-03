@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <memory.h>
 
 #include "linkedlist.h"
 
@@ -22,6 +23,26 @@ void Insert(Node **head, int value)
     }
 
     it->next = new;
+}
+
+void InsertSorted(Node **head, Node *new)
+{
+    Node *addBeforePrev = NULL, *addBefore = *head;
+
+    while (addBefore != NULL && addBefore->value < new->value)
+    {
+        addBeforePrev = addBefore;
+        addBefore = addBefore->next;
+    }
+    
+    new->next = addBefore;
+    if (addBefore == *head)
+    {
+        *head = new;
+        return;
+    }
+
+    addBeforePrev->next = new;
 }
 
 void PrintList(Node *head)
@@ -151,6 +172,24 @@ static Node* FindPrevOfSmallest(Node *head)
     return minimumPrev;
 }
 
+void SwapHead(Node **head, Node *prevOfTarget)
+{
+    Node *oldHead = *head;
+    prevOfTarget->next->next = oldHead->next;
+    *head = prevOfTarget->next;
+    oldHead->next = prevOfTarget->next;
+    prevOfTarget->next = oldHead;
+}
+
+void SwapNode(Node *prevA, Node *prevB)
+{
+    Node *A = prevA->next, *nextB = prevB->next->next;
+    prevB->next->next = A->next;
+    A->next = nextB;
+    prevA->next = prevB->next;
+    prevB->next = A;
+}
+
 void SelectionSort(Node **head)
 {
     Node *sortHead = *head, *prev = NULL;
@@ -183,4 +222,37 @@ void SelectionSort(Node **head)
             prev = prev->next;
         }
     }
+}
+
+void InsertionSort(Node **head)
+{
+    if (head == NULL || *head == NULL) return;
+
+    int n = 8, top = 0;
+    Node **stack = malloc(sizeof(*head) * n);
+    
+    Node *insertHead = *head;
+    while (insertHead->next)
+    {
+        if (top == n) 
+        {
+            n *= 2;
+            Node **new = malloc(sizeof(*head) * n);
+            memcpy(new, stack, sizeof(*head) * (n / 2));
+            free(stack);
+            stack = new;
+        }
+
+        stack[top++] = insertHead;
+        insertHead = insertHead->next;
+    }
+
+    while (top > 0)
+    {
+        Node *toInsert = stack[--top];
+        InsertSorted(&insertHead, toInsert);
+    }
+
+    *head = insertHead;
+    free(stack);
 }

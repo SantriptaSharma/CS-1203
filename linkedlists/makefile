@@ -5,6 +5,7 @@ FINT_FILES = from_integers.c
 REV_FILES = reverse.c
 CHUNK_REV_FILES = chunk_reverse.c
 SELSORT_FILES = selection_sort.c
+INSORT_FILES = insertion_sort.c
 PROGO = prog
 
 .PHONY: default clean
@@ -22,6 +23,9 @@ chunk_reverse: $(CHUNK_REV_FILES) $(LLC)
 
 selection_sort: $(SELSORT_FILES) $(LLC)
 	$(CC) $(FLAGS) -o $(PROGO) $(SELSORT_FILES) $(LLC)
+
+insertion_sort: $(INSORT) $(LLC)
+	$(CC) $(FLAGS) -o $(PROGO) $(INSORT_FILES) $(LLC)
 
 clean:
 	rm -f *.o

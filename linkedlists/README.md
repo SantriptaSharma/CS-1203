@@ -27,3 +27,8 @@
     ```bash
     $ make selection_sort
     ```
+
+- ### **Insertion Sort** - Sorts a given linked list using insertion sort
+    ```bash
+    $ make insertion_sort
+    ```
