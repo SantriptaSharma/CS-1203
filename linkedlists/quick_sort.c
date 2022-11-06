@@ -22,8 +22,8 @@ int main()
     printf("Created linked list: ");
     PrintList(head);
 
-    SelectionSort(&head);
-    printf("Sorted list (hopefully): ");
+    QuickSort(&head, N);
+    printf("Sorted list: ");
     PrintList(head);
 
     FreeList(head);

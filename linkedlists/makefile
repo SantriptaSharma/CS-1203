@@ -6,6 +6,7 @@ REV_FILES = reverse.c
 CHUNK_REV_FILES = chunk_reverse.c
 SELSORT_FILES = selection_sort.c
 INSORT_FILES = insertion_sort.c
+QSORT_FILES = quick_sort.c
 PROGO = prog
 
 .PHONY: default clean
@@ -24,8 +25,11 @@ chunk_reverse: $(CHUNK_REV_FILES) $(LLC)
 selection_sort: $(SELSORT_FILES) $(LLC)
 	$(CC) $(FLAGS) -o $(PROGO) $(SELSORT_FILES) $(LLC)
 
-insertion_sort: $(INSORT) $(LLC)
+insertion_sort: $(INSORT_FILES) $(LLC)
 	$(CC) $(FLAGS) -o $(PROGO) $(INSORT_FILES) $(LLC)
+
+quick_sort: $(QSORT_FILES) $(LLC)
+	$(CC) $(FLAGS) -o $(PROGO) $(QSORT_FILES) $(LLC)
 
 clean:
 	rm -f *.o

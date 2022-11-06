@@ -172,24 +172,6 @@ static Node* FindPrevOfSmallest(Node *head)
     return minimumPrev;
 }
 
-void SwapHead(Node **head, Node *prevOfTarget)
-{
-    Node *oldHead = *head;
-    prevOfTarget->next->next = oldHead->next;
-    *head = prevOfTarget->next;
-    oldHead->next = prevOfTarget->next;
-    prevOfTarget->next = oldHead;
-}
-
-void SwapNode(Node *prevA, Node *prevB)
-{
-    Node *A = prevA->next, *nextB = prevB->next->next;
-    prevB->next->next = A->next;
-    A->next = nextB;
-    prevA->next = prevB->next;
-    prevB->next = A;
-}
-
 void SelectionSort(Node **head)
 {
     Node *sortHead = *head, *prev = NULL;
@@ -255,4 +237,49 @@ void InsertionSort(Node **head)
 
     *head = insertHead;
     free(stack);
+}
+
+static int Partition(Node **head, int n)
+{
+    Node *lHead = NULL, *lTail = NULL, *gHead = (*head), *gTail = (*head), *piv = *head, *cur = piv->next;
+    int pVal = piv->value, pPos = 0;
+
+    for (int i = 1; i < n && cur != NULL; i++)
+    {
+        Node *next = cur->next;
+
+        if (cur->value < pVal)
+        {
+            pPos += 1;
+
+            if (lHead == NULL)
+            {
+                lHead = lTail = cur;
+            }
+            else
+            {
+                lTail->next = cur;
+                lTail = cur;
+            }
+        }
+        else
+        {
+            gTail->next = cur;
+            gTail = cur;
+        }
+
+        cur->next = NULL;
+        cur = next;
+    }
+
+    if (lTail) lTail->next = gHead;
+    if (lHead) *head = lHead; else *head = gHead;
+    if (cur != NULL) gTail->next = cur;
+
+    return pPos;
+}
+
+void QuickSort(Node **head, int n)
+{
+    printf("%d\n", Partition(head, 4));
 }

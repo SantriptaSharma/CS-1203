@@ -23,7 +23,7 @@ int main()
     PrintList(head);
 
     SelectionSort(&head);
-    printf("Sorted list (hopefully): ");
+    printf("Sorted list: ");
     PrintList(head);
 
     FreeList(head);
