@@ -12,3 +12,8 @@
     ```bash
     $ make basic
     ```
+
+- ### **from_array** - Creates a bst from a given array
+    ```bash
+    $ make from_array
+    ```

@@ -6,7 +6,8 @@ typedef struct _BSTNodeCanonical
 } BSTNode;
 
 void Insert(BSTNode **root, int val);
-// TODO: Implement
+// TODO: Implement find, inorder, preorder, postorder
 BSTNode* Find(BSTNode *root, int val);
+void PrintInOrder(BSTNode *root);
 void Delete(BSTNode **root, int val);
 void FreeBST(BSTNode *root);
