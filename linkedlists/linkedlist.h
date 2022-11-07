@@ -7,6 +7,7 @@ typedef struct _NodeCanonical
 void Insert(Node **head, int value);
 void InsertSorted(Node **head, Node *new);
 void PrintList(Node *head);
+void PrintListSegment(Node *head, int n);
 void PrintHalfList(Node *head);
 int IsListLooping(Node *head);
 void FreeList(Node *head);

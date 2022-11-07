@@ -57,6 +57,18 @@ void PrintList(Node *head)
     printf("]\n");
 }
 
+void PrintListSegment(Node *head, int n)
+{
+    printf("[");
+    for (int i = 0; i < n && head != NULL; i++)
+    {
+        printf("%d", head->value);
+        if (head->next != NULL && i != n - 1) printf(", ");
+        head = head->next;
+    }
+    printf("]\n");
+}
+
 void PrintHalfList(Node *head)
 {
     Node *tort, *hare;
@@ -241,7 +253,7 @@ void InsertionSort(Node **head)
 
 static int Partition(Node **head, int n)
 {
-    Node *lHead = NULL, *lTail = NULL, *gHead = (*head), *gTail = (*head), *piv = *head, *cur = piv->next;
+    Node *lHead = NULL, *lTail = NULL, *eHead = (*head), *eTail = (*head), *gHead = NULL, *gTail = NULL, *piv = *head, *cur = piv->next;
     int pVal = piv->value, pPos = 0;
 
     for (int i = 1; i < n && cur != NULL; i++)
@@ -262,24 +274,54 @@ static int Partition(Node **head, int n)
                 lTail = cur;
             }
         }
+        else if (cur->value == pVal)
+        {
+            pPos += 1;
+
+            eTail->next = cur;
+            eTail = cur;
+        }
         else
         {
-            gTail->next = cur;
-            gTail = cur;
+            if (gHead == NULL)
+            {
+                gHead = gTail = cur;
+            }
+            else
+            {
+                gTail->next = cur;
+                gTail = cur;
+            }
         }
 
         cur->next = NULL;
         cur = next;
     }
 
-    if (lTail) lTail->next = gHead;
-    if (lHead) *head = lHead; else *head = gHead;
-    if (cur != NULL) gTail->next = cur;
+    if (lTail) lTail->next = eHead;
+    if (lHead) *head = lHead; else *head = eHead;
+    eTail->next = gHead;
+    if (cur != NULL && gTail) gTail->next = cur;
 
     return pPos;
 }
 
 void QuickSort(Node **head, int n)
 {
-    printf("%d\n", Partition(head, 4));
+    if (n <= 1) return;
+    
+    int piv = Partition(head, n);
+
+    QuickSort(head, piv);
+    Node *rightHead = *head, *pivNode = NULL;
+    for (int i = 0; i <= piv && rightHead != NULL; i++, rightHead = rightHead->next)
+    {
+        if (i == piv) pivNode = rightHead;
+    };
+
+    if (rightHead != NULL) 
+    {
+        QuickSort(&rightHead, n - piv - 1);
+        pivNode->next = rightHead;
+    }
 }
