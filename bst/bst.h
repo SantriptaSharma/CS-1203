@@ -6,6 +6,8 @@ typedef struct _BSTNodeCanonical
 
 void Insert(BSTNode **root, int val);
 BSTNode* Find(BSTNode *root, int val);
+BSTNode* FindMinimum(BSTNode *root);
+BSTNode* FindSuccessor(BSTNode *target);
+BSTNode* Delete(BSTNode *target);
 void PrintInOrder(BSTNode *root);
-void Delete(BSTNode *target);
 void FreeBST(BSTNode *root);

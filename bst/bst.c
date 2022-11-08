@@ -40,9 +40,81 @@ BSTNode* Find(BSTNode *root, int val)
     return Find(root->right, val);
 }
 
-void Delete(BSTNode *target)
+BSTNode* FindMinimum(BSTNode *root)
 {
+    if (root == NULL || root->left == NULL) return root;
 
+    return FindMinimum(root->left);
+}
+
+BSTNode* FindSuccessor(BSTNode *target)
+{
+    if (target->right != NULL)
+    {
+        return FindMinimum(target);
+    }
+
+    BSTNode *parent = target->parent;
+    
+    while (parent != NULL && target == parent->right)
+    {
+        target = parent;
+        parent = parent->parent;
+    }
+
+    return parent;
+}
+
+static void ShiftBtoA(BSTNode **root, BSTNode *a, BSTNode *b)
+{
+    if (a->parent == NULL)
+    {
+        *root = b;
+    }
+    else if (a == a->parent->left)
+    {
+        a->parent->left = b;
+    }
+    else
+    {
+        a->parent->right = b;
+    }
+
+    if (b != NULL)
+    {
+        b->parent = a->parent;
+    }
+}
+
+BSTNode* Delete(BSTNode *target)
+{
+    BSTNode *root = target;
+    while (root != NULL && root->parent != NULL) root = root->parent;
+    
+    if (target->left == NULL)
+    {
+        ShiftBtoA(&root, target, target->right);
+        free(target);
+        return root;
+    }
+    else if (target->right == NULL)
+    {
+        ShiftBtoA(&root, target, target->left);
+        free(target);
+        return root;
+    }
+
+    BSTNode *succ = FindSuccessor(target);
+    if (succ->parent != target)
+    {
+        ShiftBtoA(&root, succ, succ->right);
+        succ->right = target->right;
+        succ->right->parent = succ;
+    }
+    ShiftBtoA(&root, target, succ);
+    succ->left = target->left;
+    succ->left->parent = succ;
+    return root;
 }
 
 static void InOrderRecursive(BSTNode *cur)
