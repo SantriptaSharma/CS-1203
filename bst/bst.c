@@ -6,17 +6,29 @@ void Insert(BSTNode **root, int val)
 {
     if (*root == NULL)
     {
-        *root = malloc(sizeof(BSTNode));
-        (*root)->left = (*root)->right = NULL;
+        *root = malloc(sizeof(**root));
+        (*root)->left = (*root)->right = (*root)->parent = NULL;
         (*root)->val = val;
+        return;
     }
-    else if (*root != NULL && val < (*root)->val)
+
+    if (val < (*root)->val)
     {
-        Insert(&(*root)->left, val);
+        if ((*root)->left != NULL) return Insert(&((*root)->left), val);
+
+        (*root)->left = malloc(sizeof(**root));
+        (*root)->left->left = (*root)->left->right = NULL;
+        (*root)->left->parent = *root;
+        (*root)->left->val = val;
     }
-    else if (*root != NULL && val > (*root)->val)
+    else
     {
-        Insert(&(*root)->right, val);
+        if ((*root)->right != NULL) return Insert(&((*root)->right), val);
+
+        (*root)->right = malloc(sizeof(**root));
+        (*root)->right->left = (*root)->right->right = NULL;
+        (*root)->right->parent = *root;
+        (*root)->right->val = val;
     }
 }
 
@@ -26,6 +38,11 @@ BSTNode* Find(BSTNode *root, int val)
 
     if (val < root->val) return Find(root->left, val);
     return Find(root->right, val);
+}
+
+void Delete(BSTNode *target)
+{
+
 }
 
 static void InOrderRecursive(BSTNode *cur)

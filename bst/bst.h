@@ -1,12 +1,11 @@
 typedef struct _BSTNodeCanonical
 {
     int val;
-    struct _BSTNodeCanonical *left, *right;
+    struct _BSTNodeCanonical *left, *right, *parent;
 } BSTNode;
 
 void Insert(BSTNode **root, int val);
-// TODO: Implement find, inorder, preorder, postorder
 BSTNode* Find(BSTNode *root, int val);
 void PrintInOrder(BSTNode *root);
-void Delete(BSTNode **root, int val);
+void Delete(BSTNode *target);
 void FreeBST(BSTNode *root);

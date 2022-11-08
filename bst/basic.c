@@ -19,11 +19,12 @@ int main()
     Assert("Expect 1 at root->left->left", a == 1);
     a = root->right->left->val;
     Assert("Expect 6 at root->right->left", a == 6);
+    PrintInOrder(root);
 
     FreeBST(root);
 
     a = root->val;
-    Assert("Expect garbage at root", a != 5);
+    Assert("Expect garbage at root after deletion", a != 5);
 
     return 0;
 }
