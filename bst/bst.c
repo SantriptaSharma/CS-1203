@@ -20,6 +20,14 @@ void Insert(BSTNode **root, int val)
     }
 }
 
+BSTNode* Find(BSTNode *root, int val)
+{
+    if (root == NULL || root->val == val) return root;
+
+    if (val < root->val) return Find(root->left, val);
+    return Find(root->right, val);
+}
+
 static void InOrderRecursive(BSTNode *cur)
 {
     if (cur->left) InOrderRecursive(cur->left);
