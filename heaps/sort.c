@@ -30,11 +30,7 @@ void ExtractMaxToEnd(int *heap, int N)
     if (N == 0) return;
 
     ArraySwap(heap, 0, N-1);
-
-    for (int i = (N-1) / 2; i >= 0; i--)
-    {
-        Heapify(heap, i, N - 1);
-    }
+    Heapify(heap, 0, N-1);
 }
 
 int main()

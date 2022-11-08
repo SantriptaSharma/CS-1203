@@ -111,6 +111,7 @@ BSTNode* Delete(BSTNode *target)
         succ->right = target->right;
         succ->right->parent = succ;
     }
+    
     ShiftBtoA(&root, target, succ);
     succ->left = target->left;
     succ->left->parent = succ;
