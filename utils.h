@@ -17,3 +17,12 @@
         printf("\x1B[32mAssertion: %s passed.\x1B[0m\n", name); \
     } \
 }
+
+#define ArraySwap(arr, a, b) {\
+    if(a != b)\
+    {\
+        int temp = arr[a];\
+        arr[a] = arr[b];\
+        arr[b] = temp;\
+    }\
+}

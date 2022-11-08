@@ -4,24 +4,36 @@
 
 void Heapify(int *arr, int i, int n)
 {
-    int minimum = i;
+    int maximum = i;
     int l = 2 * i + 1, r = 2 * i + 2;
 
-    if (l < n && arr[l] < arr[minimum])
+    if (l < n && arr[l] > arr[maximum])
     {
-        minimum = l;
+        maximum = l;
     }
 
-    if (r < n && arr[r] < arr[minimum])
+    if (r < n && arr[r] > arr[maximum])
     {
-        minimum = r;
+        maximum = r;
     }
 
-    if (minimum != i)
+    if (maximum != i)
     {
-        ArraySwap(arr, i, minimum);
+        ArraySwap(arr, i, maximum);
 
-        Heapify(arr, minimum, n);
+        Heapify(arr, maximum, n);
+    }
+}
+
+void ExtractMaxToEnd(int *heap, int N)
+{
+    if (N == 0) return;
+
+    ArraySwap(heap, 0, N-1);
+
+    for (int i = (N-1) / 2; i >= 0; i--)
+    {
+        Heapify(heap, i, N - 1);
     }
 }
 
@@ -48,7 +60,15 @@ int main()
         Heapify(arr, i, N);
     }
 
-    printf("Min-Heapified: ");
+    printf("Max-Heapified: ");
+    PrintList(arr, N);
+
+    for (int i = N; i > 1; i--)
+    {
+        ExtractMaxToEnd(arr, i);
+    }
+
+    printf("Heap sorted: ");
     PrintList(arr, N);
 
     free(arr);
