@@ -1,3 +1,8 @@
+#ifndef CSUTILS
+
+#define CSUTILS
+#include <stdlib.h>
+
 #define PrintList(list, n) {\
     int i; \
     printf("[ "); \
@@ -26,3 +31,5 @@
         arr[b] = temp;\
     }\
 }
+
+#endif
