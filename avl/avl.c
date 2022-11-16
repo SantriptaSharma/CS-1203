@@ -1,19 +1,77 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "avl.h"
+#include "../utils.h"
 
-static void UpdateHeight(AVLNode *target)
+static void UpdateHeight(AVLNode **root, AVLNode *target);
+
+static void Balance(AVLNode **root, AVLNode *target, int balance)
+{
+    int childBalance = 0;
+
+    if(balance > 0)
+    {
+        if (target->left->left) childBalance = target->left->left->height;
+        if (target->left->right) childBalance -= target->left->right->height;
+
+        if (signum(balance) == signum(childBalance))
+        {
+            RotateRight(root, target);
+            UpdateHeight(root, target->parent->parent);
+        }
+        else
+        {
+            RotateLeft(root, target->left);
+            RotateRight(root, target);
+            UpdateHeight(root, target->parent->parent);
+        }
+    }
+    else
+    {
+        if (target->right->left) childBalance = target->right->left->height;
+        if (target->right->right) childBalance -= target->right->right->height;
+
+        if (signum(balance) == signum(childBalance))
+        {
+            RotateLeft(root, target);
+            UpdateHeight(root, target->parent->parent);
+        }
+        else
+        {
+            RotateRight(root, target->right);
+            RotateLeft(root, target);
+            UpdateHeight(root, target->parent->parent);
+        }
+    }
+}
+
+static void UpdateHeight(AVLNode **root, AVLNode *target)
 {
     if (target == NULL) return;
 
-    int maxHeight = -1;
+    int maxHeight = -1, balance = 0;
 
-    if (target->left) maxHeight = target->left->height;
-    if (target->right && maxHeight < target->right->height) maxHeight = target->right->height;
+    if (target->left)
+    {
+        maxHeight = target->left->height;
+        balance = maxHeight;
+    }
+
+    if (target->right)
+    {
+        if (maxHeight < target->right->height) maxHeight = target->right->height;
+        balance -= target->right->height;
+    }
 
     target->height = maxHeight + 1;
 
-    if (maxHeight != -1) UpdateHeight(target->parent);
+    if (abs(balance) >= 2)
+    {
+        Balance(root, target, balance);
+        return;
+    }
+
+    if (maxHeight != -1) UpdateHeight(root, target->parent);
 }
 
 void Insert(AVLNode **root, int val)
@@ -27,28 +85,34 @@ void Insert(AVLNode **root, int val)
         return;
     }
 
-    if (val < (*root)->val)
-    {
-        if ((*root)->left != NULL) return Insert(&((*root)->left), val);
+    AVLNode *target = (*root);
 
-        (*root)->left = malloc(sizeof(**root));
-        (*root)->left->left = (*root)->left->right = NULL;
-        (*root)->left->parent = *root;
-        (*root)->left->val = val;
-        (*root)->left->height = 0;
+    char isLeft = val < target->val;
+
+    while ((isLeft && target->left) || (!isLeft  && target->right))
+    {
+        target = isLeft ? target->left : target->right;
+        isLeft = val < target->val;
+    }
+
+    if (isLeft) 
+    {
+        target->left = malloc(sizeof(*target));
+        target->left->left = target->left->right = NULL;
+        target->left->parent = target;
+        target->left->val = val;
+        target->left->height = 0;
     }
     else
     {
-        if ((*root)->right != NULL) return Insert(&((*root)->right), val);
-
-        (*root)->right = malloc(sizeof(**root));
-        (*root)->right->left = (*root)->right->right = NULL;
-        (*root)->right->parent = *root;
-        (*root)->right->val = val;
-        (*root)->right->height = 0;
+        target->right = malloc(sizeof(*target));
+        target->right->left = target->right->right = NULL;
+        target->right->parent = target;
+        target->right->val = val;
+        target->right->height = 0;
     }
 
-    UpdateHeight(*root);
+    UpdateHeight(root, target);
 }
 
 AVLNode* Find(AVLNode *root, int val)
@@ -70,7 +134,7 @@ AVLNode* FindSuccessor(AVLNode *target)
 {
     if (target->right != NULL)
     {
-        return FindMinimum(target);
+        return FindMinimum(target->right);
     }
 
     AVLNode *parent = target->parent;
@@ -82,6 +146,80 @@ AVLNode* FindSuccessor(AVLNode *target)
     }
 
     return parent;
+}
+
+void RotateLeft(AVLNode **root, AVLNode *target)
+{
+    AVLNode *parent = target->parent, *child = target->right;
+    AVLNode *inner = child->left;
+    target->right = inner;
+    if (inner) inner->parent = target;
+    int targetHeight = target->left ? target->left->height + 1 : 0;
+    if (inner) targetHeight = max(targetHeight, inner->height + 1);
+    target->height = targetHeight;
+    child->left = target;
+    int childHeight = child->right ? child->right->height + 1 : 0;
+    childHeight = max(childHeight, targetHeight + 1);
+    child->height = childHeight;
+    target->parent = child;
+
+    if (*root == target)
+    {
+        *root = child;
+        child->parent = NULL;
+    }
+    else
+    {
+        char isRight = target == parent->right;
+        
+        if (isRight) 
+        {
+            parent->right = child;
+        }
+        else
+        {
+            parent->left = child;
+        }
+
+        child->parent = parent;
+    }
+}
+
+void RotateRight(AVLNode **root, AVLNode *target)
+{
+    AVLNode *parent = target->parent, *child = target->left;
+    AVLNode *inner = child->right;
+    target->left = inner;
+    if (inner) inner->parent = target;
+    int targetHeight = target->left ? target->left->height + 1 : 0;
+    if (inner) targetHeight = max(targetHeight, inner->height + 1);
+    target->height = targetHeight;
+    child->right = target;
+    int childHeight = child->left ? child->left->height + 1 : 0;
+    childHeight = max(childHeight, targetHeight + 1);
+    child->height = childHeight;
+    target->parent = child;
+
+    if (*root == target)
+    {
+        *root = child;
+        child->parent = NULL;
+    }
+    else
+    {
+        char isRight = target == parent->right;
+        
+        if (isRight) 
+        {
+            parent->right = child;
+        }
+        else
+        {
+            parent->left = child;
+        }
+
+        child->parent = parent;
+    }
 }
 
 static void ShiftBtoA(AVLNode **root, AVLNode *a, AVLNode *b)

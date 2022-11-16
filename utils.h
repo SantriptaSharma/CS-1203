@@ -33,3 +33,9 @@
 }
 
 #endif
+
+#define signum(a) (a > 0 ? 1 : (a < 0 ? -1 : 0))
+
+#define max(a, b) ((a) > (b) ? (a) : (b))
+
+#define min(a, b) ((a) > (b) ? (b) : (a))

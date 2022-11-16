@@ -51,7 +51,7 @@ BSTNode* FindSuccessor(BSTNode *target)
 {
     if (target->right != NULL)
     {
-        return FindMinimum(target);
+        return FindMinimum(target->right);
     }
 
     BSTNode *parent = target->parent;

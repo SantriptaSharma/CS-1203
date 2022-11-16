@@ -18,6 +18,7 @@ int main()
         printf("Enter element %d: ", i+1);
         scanf("%d", &el);
         Insert(&root, el);
+        PrintInOrder(root);
     }
     
     printf("\n");
