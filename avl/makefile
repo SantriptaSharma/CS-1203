@@ -4,6 +4,7 @@ FLAGS = -g3 -Wall
 PROGO = prog
 ARR_FILES = from_array.c
 TEST_R_FILES = test_rotates.c
+DEL_FILES = deletions.c
 
 .PHONY: default clean
 
@@ -18,3 +19,6 @@ from_array: $(ARR_FILES)
 
 test_rotates: $(TEST_R_FILES)
 	$(CC) $(FLAGS) $(SRC) $(TEST_R_FILES) -o $(PROGO)
+
+deletions: $(DEL_FILES)
+	$(CC) $(FLAGS) $(SRC) $(DEL_FILES) -o $(PROGO)

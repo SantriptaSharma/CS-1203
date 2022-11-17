@@ -251,20 +251,24 @@ AVLNode* Delete(AVLNode *target)
     if (target->left == NULL)
     {
         ShiftBtoA(&root, target, target->right);
+        UpdateHeight(&root, target->parent);
         free(target);
         return root;
     }
     else if (target->right == NULL)
     {
         ShiftBtoA(&root, target, target->left);
+        UpdateHeight(&root, target->parent);
         free(target);
         return root;
     }
 
     AVLNode *succ = FindSuccessor(target);
+    AVLNode *heightStart = succ->parent;
     if (succ->parent != target)
     {
         ShiftBtoA(&root, succ, succ->right);
+        heightStart = succ->right;
         succ->right = target->right;
         succ->right->parent = succ;
     }
@@ -272,6 +276,8 @@ AVLNode* Delete(AVLNode *target)
     ShiftBtoA(&root, target, succ);
     succ->left = target->left;
     succ->left->parent = succ;
+    UpdateHeight(&root, heightStart);
+    free(target);
     return root;
 }
 
