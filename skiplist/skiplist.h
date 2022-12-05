@@ -16,4 +16,4 @@ void PrintLevel(SkipList *list, int level);
 void FreeSkipList(SkipList *list);
 
 void SkipListInsert(SkipList *list, int val);
-void SkipListBinarySearch(SkipList *list, int val);
+SkipNode* SkipListBinarySearch(SkipList *list, int val);

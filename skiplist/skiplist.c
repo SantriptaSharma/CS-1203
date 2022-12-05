@@ -83,7 +83,35 @@ void SkipListInsert(SkipList *list, int val)
 }
 
 // Assumes Sorted List
-void SkipListBinarySearch(SkipList *list, int val)
+SkipNode* SkipListBinarySearch(SkipList *list, int val)
 {
+    int level = list->maxHeight;
 
+    SkipNode *prev = list->head[level], *cur;
+
+    while (level != -1)
+    {
+        if (prev->val > val)
+        {
+            level -= 1;
+            prev = list->head[level];
+            continue;
+        }
+
+        if (prev && prev->val == val) return prev;
+        cur = prev->next[level];
+
+        while (cur != NULL && cur->val < val)
+        {
+            prev = prev->next[level];
+            cur = cur->next[level];
+        }
+
+        if (cur && cur->val == val) return cur;
+        if (prev && prev->val == val) return prev;  
+
+        level -= 1;
+    }
+
+    return NULL;
 }

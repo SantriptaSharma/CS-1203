@@ -8,7 +8,10 @@ PROGO = prog
 default: clean
 
 basic: $(SRC)
-	$(CC) $(FLAGS) -o $(PROGO) $(SRC) basic.c
+	$(CC) $(FLAGS) -o $(PROGO) $(SRC) $@.c
+
+search: $(SRC)
+	$(CC) $(FLAGS) -o $(PROGO) $(SRC) $@.c
 
 clean:
 	rm -f *.o
